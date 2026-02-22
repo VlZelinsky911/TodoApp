@@ -20,6 +20,7 @@ export const errorHandler = (
     return res.status(err.statusCode).json({
       status: "error",
       message: err.message,
+      ...(err.validationErrors && { errors: err.validationErrors }),
       ...(isDev && { stack: err.stack }),
     });
   }

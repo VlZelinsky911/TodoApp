@@ -1,15 +1,18 @@
 import { api } from "./axios";
 import { tokenStore } from "../store/tokenStore";
-import type { User, AuthResponse, ApiResponse } from "../types/auth";
+import type {
+  UserDto,
+  AuthResponseDto,
+  MeResponseDto,
+  LoginRequestDto,
+  RegisterRequestDto,
+} from "../dto";
 
 export const authApi = {
-  async register(email: string, password: string): Promise<User> {
-    const res = await api.post<ApiResponse<AuthResponse>>(
+  async register(credentials: RegisterRequestDto): Promise<UserDto> {
+    const res = await api.post<AuthResponseDto>(
       "/api/auth/register",
-      {
-        email,
-        password,
-      },
+      credentials,
     );
 
     const { accessToken, user } = res.data.data!;
@@ -19,11 +22,8 @@ export const authApi = {
     return user;
   },
 
-  async login(email: string, password: string): Promise<User> {
-    const res = await api.post<ApiResponse<AuthResponse>>("/api/auth/login", {
-      email,
-      password,
-    });
+  async login(credentials: LoginRequestDto): Promise<UserDto> {
+    const res = await api.post<AuthResponseDto>("/api/auth/login", credentials);
 
     const { accessToken, user } = res.data.data!;
 
@@ -44,8 +44,8 @@ export const authApi = {
     tokenStore.clearToken();
   },
 
-  async getMe(): Promise<User> {
-    const res = await api.get<ApiResponse<{ user: User }>>("/api/auth/me");
+  async getMe(): Promise<UserDto> {
+    const res = await api.get<MeResponseDto>("/api/auth/me");
 
     return res.data.data!.user;
   },

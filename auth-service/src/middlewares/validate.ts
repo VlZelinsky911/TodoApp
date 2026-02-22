@@ -2,6 +2,11 @@ import type { Request, Response, NextFunction } from "express";
 import { ApiError } from "../utils/index.js";
 import { z } from "zod";
 
+export interface ValidationError {
+  field: string;
+  message: string;
+}
+
 export const validate =
   (schema: z.ZodType) => (req: Request, _res: Response, next: NextFunction) => {
     const result = schema.safeParse(req.body);
@@ -12,7 +17,7 @@ export const validate =
         message: e.message,
       }));
 
-      throw ApiError.badRequest(JSON.stringify(errors));
+      throw ApiError.validation("Validation failed", errors);
     }
 
     req.body = result.data;

@@ -28,7 +28,15 @@ export const LoginPage = () => {
       navigate("/dashboard");
     } catch (error) {
       if (error instanceof AxiosError) {
-        setApiError(error.response?.data?.message || "Login failed");
+        const responseData = error.response?.data;
+        if (responseData?.errors && Array.isArray(responseData.errors)) {
+          const errorMessages = responseData.errors
+            .map((e: { message: string }) => e.message)
+            .join(". ");
+          setApiError(errorMessages);
+        } else {
+          setApiError(responseData?.message || "Login failed");
+        }
       } else {
         setApiError("An unexpected error occurred");
       }

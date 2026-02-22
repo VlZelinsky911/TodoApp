@@ -3,6 +3,12 @@ import { UserService } from "../user/index.js";
 import { AuthService } from "./auth.service.js";
 import { setRefreshTokenCookie, clearAuthCookies } from "../../utils/cookie.js";
 import { ApiError } from "../../utils/index.js";
+import {
+  UserDto,
+  AuthResponseDto,
+  MeResponseDto,
+  MessageResponseDto,
+} from "./dto/index.js";
 
 const userService = new UserService();
 const authService = new AuthService(userService);
@@ -19,13 +25,10 @@ export const register = async (
 
     setRefreshTokenCookie(res, result.refreshToken);
 
-    res.status(201).json({
-      status: "success",
-      data: {
-        accessToken: result.accessToken,
-        user: result.user,
-      },
-    });
+    const userDto = new UserDto(result.user);
+    const response = new AuthResponseDto(result.accessToken, userDto);
+
+    res.status(201).json(response.toJSON());
   } catch (error) {
     next(error);
   }
@@ -43,13 +46,10 @@ export const login = async (
 
     setRefreshTokenCookie(res, result.refreshToken);
 
-    res.status(200).json({
-      status: "success",
-      data: {
-        accessToken: result.accessToken,
-        user: result.user,
-      },
-    });
+    const userDto = new UserDto(result.user);
+    const response = new AuthResponseDto(result.accessToken, userDto);
+
+    res.status(200).json(response.toJSON());
   } catch (error) {
     next(error);
   }
@@ -71,13 +71,10 @@ export const refresh = async (
 
     setRefreshTokenCookie(res, result.refreshToken);
 
-    res.status(200).json({
-      status: "success",
-      data: {
-        accessToken: result.accessToken,
-        user: result.user,
-      },
-    });
+    const userDto = new UserDto(result.user);
+    const response = new AuthResponseDto(result.accessToken, userDto);
+
+    res.status(200).json(response.toJSON());
   } catch (error) {
     next(error);
   }
@@ -99,10 +96,8 @@ export const logout = async (
 
     clearAuthCookies(res);
 
-    res.status(200).json({
-      status: "success",
-      message: "Logged out successfully",
-    });
+    const response = new MessageResponseDto("Logged out successfully");
+    res.status(200).json(response.toJSON());
   } catch (error) {
     next(error);
   }
@@ -124,10 +119,8 @@ export const logoutAll = async (
 
     clearAuthCookies(res);
 
-    res.status(200).json({
-      status: "success",
-      message: "Logged out from all sessions",
-    });
+    const response = new MessageResponseDto("Logged out from all sessions");
+    res.status(200).json(response.toJSON());
   } catch (error) {
     next(error);
   }
@@ -146,16 +139,10 @@ export const me = async (req: Request, res: Response, next: NextFunction) => {
       throw ApiError.notFound("User not found");
     }
 
-    res.status(200).json({
-      status: "success",
-      data: {
-        user: {
-          id: user._id.toString(),
-          email: user.email,
-          createdAt: user.createdAt,
-        },
-      },
-    });
+    const userDto = UserDto.fromEntity(user);
+    const response = new MeResponseDto(userDto);
+
+    res.status(200).json(response.toJSON());
   } catch (error) {
     next(error);
   }
