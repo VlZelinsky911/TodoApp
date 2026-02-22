@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { ApiError } from "../utils/index.js";
+import { ApiError, logger } from "../utils/index.js";
 import { env } from "../config/index.js";
 
 export const errorHandler = (
@@ -10,10 +10,10 @@ export const errorHandler = (
 ) => {
   const isDev = env.NODE_ENV === "development";
 
-  if (isDev) {
-    console.error(err);
+  if (err instanceof ApiError) {
+    logger.warn({ err, statusCode: err.statusCode }, err.message);
   } else {
-    console.error(err.message);
+    logger.error({ err }, err.message);
   }
 
   if (err instanceof ApiError) {
