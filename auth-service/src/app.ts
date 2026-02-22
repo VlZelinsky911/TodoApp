@@ -11,11 +11,11 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.json({ message: "Server is running" });
 });
 
-app.get("/health", (req, res) => {
+app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
 });
 

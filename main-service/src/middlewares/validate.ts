@@ -1,0 +1,21 @@
+import type { Request, Response, NextFunction } from "express";
+import { ApiError } from "../utils/index.js";
+import { z } from "zod";
+
+export const validate =
+  (schema: z.ZodType) =>
+  (req: Request, _res: Response, next: NextFunction): void => {
+    const result = schema.safeParse(req.body);
+
+    if (!result.success) {
+      const errors = result.error.issues.map((e) => ({
+        field: e.path.join("."),
+        message: e.message,
+      }));
+
+      throw ApiError.validation("Validation failed", errors);
+    }
+
+    req.body = result.data;
+    next();
+  };
