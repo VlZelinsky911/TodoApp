@@ -1,0 +1,21 @@
+.form-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 0.375rem;
+  color: #dc2626;
+}
+
+.form-error__icon {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.form-error__message {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
