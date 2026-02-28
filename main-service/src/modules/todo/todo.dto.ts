@@ -1,4 +1,4 @@
-import type { Priority, SortBy, SortOrder, Status } from "./todo.types.js";
+import type { Priority, SortBy, SortOrder, Status } from "./index.js";
 
 export interface CreateTodoDTO {
   title: string;
@@ -25,14 +25,14 @@ export interface TodoQueryDTO {
 }
 
 export interface TodoResponseDTO {
-  id: number;
+  id: string;
   title: string;
-  description: string;
+  description?: string | undefined;
   completed: boolean;
   priority: Priority;
-  dueDate: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  dueDate?: string | undefined;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface BulkDeleteDTO {
