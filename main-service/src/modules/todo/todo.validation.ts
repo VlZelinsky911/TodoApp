@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { Priority, SortOrder, Status } from "./index.js";
+import { Priority, SortBy, SortOrder, Status } from "./index.js";
 
-export const priorityEnum = z.enum(Priority);
-export const statusEnum = z.enum(Status);
+export const priorityEnum = z.nativeEnum(Priority);
+export const statusEnum = z.nativeEnum(Status);
 
 export const createTodoSchema = z.object({
   title: z.string().min(1).max(200),
@@ -32,14 +32,16 @@ export const todoQuerySchema = z.object({
   priority: priorityEnum.optional(),
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().max(100).default(20),
-  sortBy: z
-    .enum(["createdAt", "updatedAt", "title", "dueDate", "priority"])
-    .default("createdAt"),
-  sortOrder: z.enum(SortOrder).default(SortOrder.Desc),
+  sortBy: z.nativeEnum(SortBy).default(SortBy.CreatedAt),
+  sortOrder: z.nativeEnum(SortOrder).default(SortOrder.Desc),
 });
 
 export const bulkDeleteSchema = z.object({
   ids: z.array(z.string().min(1)),
+});
+
+export const idParamSchema = z.object({
+  id: z.string().min(1),
 });
 
 export type CreateTodoInput = z.infer<typeof createTodoSchema>;
