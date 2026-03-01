@@ -1,16 +1,4 @@
-import { z } from "zod";
-
-export const registerDtoSchema = z.object({
-  email: z.email({ error: "Invalid email format" }),
-  password: z
-    .string({ error: "Password is required" })
-    .min(8, "Password must be at least 8 characters"),
-});
-
-export const loginDtoSchema = z.object({
-  email: z.email({ error: "Invalid email format" }),
-  password: z.string({ error: "Password is required" }),
-});
+import { registerSchema, loginSchema } from "../auth.schemas.js";
 
 export class RegisterDto {
   email: string;
@@ -22,7 +10,7 @@ export class RegisterDto {
   }
 
   static validate(data: unknown): RegisterDto {
-    const parsed = registerDtoSchema.parse(data);
+    const parsed = registerSchema.parse(data);
     return new RegisterDto(parsed);
   }
 }
@@ -37,10 +25,7 @@ export class LoginDto {
   }
 
   static validate(data: unknown): LoginDto {
-    const parsed = loginDtoSchema.parse(data);
+    const parsed = loginSchema.parse(data);
     return new LoginDto(parsed);
   }
 }
-
-export type RegisterInput = z.infer<typeof registerDtoSchema>;
-export type LoginInput = z.infer<typeof loginDtoSchema>;

@@ -1,2 +1,2 @@
-export { AuthProvider, AuthContext } from "./AuthContext";
-export type { AuthContextType, AuthProviderProps } from "./AuthContextType";
+export * from "./AuthContext";
+export * from "./AuthContextType";

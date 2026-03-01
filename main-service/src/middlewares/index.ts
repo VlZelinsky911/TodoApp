@@ -1,3 +1,3 @@
-export { errorHandler } from "./errorHandler.js";
-export { authenticate } from "./authenticate.js";
-export { validate } from "./validate.js";
+export * from "./errorHandler.js";
+export * from "./authenticate.js";
+export * from "./validate.js";

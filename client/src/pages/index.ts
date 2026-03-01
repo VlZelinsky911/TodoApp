@@ -1,3 +1,3 @@
-export { LoginPage } from "./LoginPage";
-export { RegisterPage } from "./RegisterPage";
-export { DashboardPage } from "./DashboardPage";
+export * from "./LoginPage";
+export * from "./RegisterPage";
+export * from "./DashboardPage";

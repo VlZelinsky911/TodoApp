@@ -1,6 +1,1 @@
-export {
-  loginSchema,
-  registerSchema,
-  type LoginSchema,
-  type RegisterSchema,
-} from "./auth.schemas";
+export * from "./auth.schemas";
